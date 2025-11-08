@@ -1,0 +1,17 @@
+Authentication:
+  -  Log-in
+  -  Sign-in
+Members:
+  -  Add Member
+  -  Members List
+Inventory:
+  -  Inventory
+  -  Add Item
+Checkout:
+  -  Checkout & Print
+  -  History
+Dashboard:
+  -  Dashboard
+  -  Worker Management
+
+Template:
