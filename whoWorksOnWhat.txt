@@ -1,7 +1,7 @@
 Authentication: Nero
   -  Log-in
   -  Sign-in
-Members: 
+Members: Ignatius
   -  Add Member
   -  Members List
 Inventory: Filipus
@@ -14,4 +14,4 @@ Dashboard: Eli Cohen
   -  Dashboard
   -  Worker Management
 
-Template:
+Template: Ignatius
