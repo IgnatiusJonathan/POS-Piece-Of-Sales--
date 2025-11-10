@@ -10,7 +10,7 @@ Inventory: Filipus
 Checkout: Jansen
   -  Checkout & Print
   -  History
-Dashboard:
+Dashboard: Eli Cohen
   -  Dashboard
   -  Worker Management
 
