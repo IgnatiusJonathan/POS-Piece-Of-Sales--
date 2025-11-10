@@ -4,7 +4,7 @@ Authentication:
 Members: Nero
   -  Add Member
   -  Members List
-Inventory:
+Inventory: Filipus
   -  Inventory
   -  Add Item
 Checkout:
