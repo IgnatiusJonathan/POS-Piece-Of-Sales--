@@ -1,7 +1,7 @@
 Authentication:
   -  Log-in
   -  Sign-in
-Members:
+Members: Nero
   -  Add Member
   -  Members List
 Inventory:
