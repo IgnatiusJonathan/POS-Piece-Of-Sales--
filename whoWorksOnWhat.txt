@@ -7,7 +7,7 @@ Members: Nero
 Inventory: Filipus
   -  Inventory
   -  Add Item
-Checkout:
+Checkout: Jansen
   -  Checkout & Print
   -  History
 Dashboard:
