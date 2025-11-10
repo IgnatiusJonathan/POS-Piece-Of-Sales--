@@ -1,7 +1,7 @@
-Authentication:
+Authentication: Nero
   -  Log-in
   -  Sign-in
-Members: Nero
+Members: 
   -  Add Member
   -  Members List
 Inventory: Filipus
