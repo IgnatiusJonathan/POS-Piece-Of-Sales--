@@ -1,0 +1,17 @@
+Authentication: Nero
+  -  Log-in
+  -  Sign-in
+Members: 
+  -  Add Member
+  -  Members List
+Inventory: Filipus
+  -  Inventory
+  -  Add Item
+Checkout: Jansen
+  -  Checkout & Print
+  -  History
+Dashboard: Eli Cohen
+  -  Dashboard
+  -  Worker Management
+
+Template:
