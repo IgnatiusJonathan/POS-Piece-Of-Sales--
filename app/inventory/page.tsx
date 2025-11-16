@@ -2,34 +2,14 @@
 import { useState } from "react";
 import Image from "next/image";
 import Footer from "@/components/Footer";
+import Header from "@/components/Header";
 
 
 export default function InventoryPage() {
 
   return (
     <>
-      <div style={{ padding: '30px', fontFamily: 'Arial, sans-serif', fontSize: '50px' }}> 
-        
-      
-        <h1 style={{ 
-            paddingBottom: '40px', 
-            color: '#800000',
-            borderBottom: '1px solid #800000',
-            display: 'flex', 
-            alignItems: 'center' 
-        }}>
-          <Image 
-            src="/images/untar.png" 
-            alt="Logo Untarmart" 
-            width={90} 
-            height={90} 
-            style={{ 
-                marginRight: '20px', 
-                marginTop: '-10px' 
-            }}
-          />
-          UNTARMART
-        </h1>
+      <Header />
 
        
         <div className=" box grid grid-cols-4 gap-6 mt-6">
@@ -50,7 +30,19 @@ export default function InventoryPage() {
             </div>
 
           
-            <div className="column-desc bg-[#800000] p-3">
+            <div className="column-desc bg-[#800000] p-3 relative">
+           <a 
+      href="#" 
+      className="absolute top-0 left-0 text-white text-sm px-3 py-1 font-semibold"
+      style={{
+   
+        clipPath: 'polygon(0% 100%, 100% 100%, 90% 0%, 0% 0%)', 
+        backgroundColor: '#800000', 
+        transform: 'translateY(-100%)'
+      }}
+    >
+      ITEM
+    </a>
           
               <h3 className="text-xl font-bold text-white mb-1">
                   chitato
@@ -76,7 +68,7 @@ export default function InventoryPage() {
             </div>
            </div>
         </div> 
-      </div> 
+      
       
       <Footer /> 
     </>
