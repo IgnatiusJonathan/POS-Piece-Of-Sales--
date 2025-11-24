@@ -1,6 +1,6 @@
 Authentication: Nero
   -  Log-in
-  -  Sign-in
+  -  Worker Management
 Members: Ignatius
   -  Add Member
   -  Members List
@@ -8,10 +8,10 @@ Inventory: Filipus
   -  Inventory
   -  Add Item
 Checkout: Jansen
-  -  Checkout & Print
-  -  History
+  -  Checkout
+  -  Print
 Dashboard: Eli Cohen
   -  Dashboard
-  -  Worker Management
+  -  History
 
 Template: Ignatius
