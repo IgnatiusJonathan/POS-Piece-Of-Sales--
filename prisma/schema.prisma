@@ -2,8 +2,8 @@
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
-  provider = "prisma-client"
-  output   = "../app/generated/prisma"
+  provider = "prisma-client-js" 
+
 }
 
 datasource db {
@@ -11,37 +11,38 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Worker{
-  id  int @id @default(autoincrement())
-  nama  String
-  email String
+model Worker {
+  id       Int    @id @default(autoincrement()) 
+  nama     String
+  email    String
   password String
 }
 
-model Product{
-  id  int @id @default(autoincrement())
-  nama String
+model Product {
+  id    Int     @id @default(autoincrement()) 
+  nama  String
   jenis String
-  stok int
-  harga int
+  stok  Int     
+  harga Int     
   image String?
 }
 
-model History{
-  id  int @id @default(autoincrement())
+model History {
+  id      Int      @id @default(autoincrement()) 
   product String
-  jumlah int
-  harga int
-  tanggal date
+  jumlah  Int      
+  harga   Int      
+  tanggal DateTime @default(now()) 
   pembeli String
-  kasier String
+  kasier  String
 }
 
-model Member{
-  id  int @id @default(autoincrement())
-  name String
-  tanggal date
-  noTelp  int
-  email String
+model Member {
+  id      Int      @id @default(autoincrement()) 
+  name    String
+  tanggal DateTime @default(now()) 
+  noTelp  String   
+  email   String
 }
+
 
