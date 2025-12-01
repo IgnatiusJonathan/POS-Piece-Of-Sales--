@@ -1,76 +1,109 @@
 "use client";
 import { useState } from "react";
-import Image from "next/image";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
-
+import Navbar from "@/components/navbar";
+import SearchBar from "@/components/SearchBar";
 
 export default function InventoryPage() {
+  const [selectedCategory, setSelectedCategory] = useState("makanan");
+  const categories = ["Makanan", "Minuman", "Snack", "Lainnya"];
+
+  const tabShape = {
+    clipPath: 'polygon(0% 100%, 100% 100%, 90% 0%, 0% 0%)',
+  };
+
+  const itemLabelShape = {
+    clipPath: 'polygon(0% 100%, 100% 100%, 85% 0%, 0% 0%)',
+  };
 
   return (
     <>
       <Header />
+      <div className="flex">
+        <div className="fixed top-0 left-0 h-full z-30">
+          <Navbar />
+        </div>
 
-       
-        <div className=" box grid grid-cols-4 gap-6 mt-6">
+        <div className="flex-1 ml-[220px] min-h-screen bg-white transition-all duration-300">
           
-        
-          
-         
-          <div className="bg-white border-1 border-red-900 rounded shadow overflow-hidden">
+          <div className="pt-[80px] px-8 pb-4 bg-white sticky top-0 z-20">
+            <SearchBar
+              data={[]}
+              onSearch={() => {}}
+              keySearch="nama"
+              placeholder="Cari barang..."
+            />
+          </div>
+
+          <div className="px-6 mb-10">
             
-        
-            <div className="w-full h-48 flex items-center justify-center overflow-hidden"> 
-              <Image 
-                  src="/images/chitato.png" 
-                  alt="Gambar Produk" 
-                  width={130} 
-                  height={130}
-              />
+          
+            <div className="bg-[#800000] rounded-t-lg px-6 flex items-end h-[50px]">
+              <span className="text-white/70 font-bold text-xs mr-4 mb-2 tracking-wide">
+                KATEGORI:
+              </span>
+
+             
+              <div className="flex items-end h-full -mb-[1px]"> 
+                {categories.map((category, index) => {
+                  const isActive = selectedCategory === category.toLowerCase();
+                  return (
+                    <button
+                      key={category}
+                      onClick={() => setSelectedCategory(category.toLowerCase())}
+                      style={tabShape}
+                      className={`
+                        px-8 py-2 font-bold text-xs tracking-wide relative transition-all duration-200
+                        ${index !== 0 ? '-ml-4' : ''} 
+                        
+                        ${isActive 
+                          ? 'bg-white text-[#800000] z-20 h-[40px]' 
+                          : 'bg-[#600000] text-gray-300 hover:bg-[#700000] hover:text-white z-0 h-[35px]'
+                        }
+                      `}
+                    >
+                      {category.toUpperCase()}
+                    </button>
+                  );
+                })}
+              </div>
             </div>
 
           
-            <div className="column-desc bg-[#800000] p-3 relative">
-           <a 
-      href="#" 
-      className="absolute top-0 left-0 text-white text-sm px-3 py-1 font-semibold"
-      style={{
-   
-        clipPath: 'polygon(0% 100%, 100% 100%, 90% 0%, 0% 0%)', 
-        backgroundColor: '#800000', 
-        transform: 'translateY(-100%)'
-      }}
-    >
-      ITEM
-    </a>
-          
-              <h3 className="text-xl font-bold text-white mb-1">
-                  chitato
-              </h3>
-              <p className="text-base text-white">
-                  Stok: 50
-              </p>
-              <p className="text-lg font-semibold text-white">
-                  Rp 10.000
-              </p>
-
-            
-              <button 
-  className="mt-3 w-full bg-white text-[#800000] py-3 rounded text-md transition duration-100 border-3 border-[#800000] hover:bg-[#800000] hover:text-white"
-  style={{ 
-    fontFamily: 'Roboto, sans-serif', 
-    fontSize: '18px', 
-    borderRadius:'7px',
-    fontWeight: 300
-  }}>
-                  Lihat Detail
-              </button>
+            <div className="border border-t-0 border-[#800000] rounded-b-lg p-8 bg-white relative z-0 shadow-sm">
+              <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+                {Array.from({ length: 8 }).map((_, i) => (
+                  <div
+                    key={i}
+                
+                    className="bg-white border border-[#800000] rounded shadow-sm overflow-hidden group hover:shadow-xl hover:-translate-y-1 transition-all duration-300"
+                  >
+                    <div className="w-full h-32 flex items-center justify-center bg-gray-50 relative">
+                      <span className="text-gray-300 text-xs font-medium">No Image</span>
+                    </div>
+                    <div className="bg-[#800000] p-3 relative h-auto min-h-[60px]">
+                      <div
+                        className="absolute top-0 left-0 bg-[#800000] text-white text-[10px] px-4 py-1 font-bold tracking-wider shadow-sm"
+                        style={{ ...itemLabelShape, transform: 'translateY(-100%)' }}
+                      >
+                        ITEM
+                      </div>
+                      <div className="mt-1">
+                          <p className="text-white text-xs font-bold">Produk {i+1}</p>
+                          <p className="text-gray-200 text-[10px]">Rp 10.000</p>
+                      </div>
+                    </div>
+                  </div>
+                ))}
+              </div>
             </div>
-           </div>
-        </div> 
-      
-      
-      <Footer /> 
+
+          </div>
+
+        </div>
+      </div>
+      <Footer />
     </>
   );
 }
