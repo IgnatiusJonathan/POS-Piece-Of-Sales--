@@ -12,36 +12,36 @@ datasource db {
 }
 
 model Worker{
-  id  int @id @default(autoincrement())
+  id  Int @id @default(autoincrement())
   nama  String
   email String
   password String
 }
 
 model Product{
-  id  int @id @default(autoincrement())
+  id  Int @id @default(autoincrement())
   nama String
   jenis String
-  stok int
-  harga int
+  stok Int
+  harga Int
   image String?
 }
 
 model History{
-  id  int @id @default(autoincrement())
+  id  Int @id @default(autoincrement())
   product String
-  jumlah int
-  harga int
-  tanggal date
+  jumlah Int
+  harga Int
+  tanggal DateTime 
   pembeli String
   kasier String
 }
 
 model Member{
-  id  int @id @default(autoincrement())
+  id  Int @id @default(autoincrement())
   name String
-  tanggal date
-  noTelp  int
+  tanggal DateTime 
+  noTelp  Int
   email String
 }
 
