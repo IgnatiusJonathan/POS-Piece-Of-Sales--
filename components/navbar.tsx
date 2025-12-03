@@ -1,21 +1,37 @@
 "use client";
+
 import Link from 'next/link';
-import { useState } from 'react';
+import { useNavbar } from '../context/NavbarContext';
+import { usePathname } from 'next/navigation';
+import { useState, useEffect } from 'react';
 
 const Navbar = () => {
-  const [isCollapsed, setIsCollapsed] = useState<boolean>(false);  // Explicitly type as boolean
-
-  const toggleNavbar = () => setIsCollapsed(!isCollapsed);
+  const { isCollapsed, toggleNavbar } = useNavbar();
+  const currentPath = usePathname();
+  const [name, setName] = useState<string | null>(null);
+  useEffect(() => {
+      const savedName = localStorage.getItem('nama');
+      setName(savedName);
+    }, []);
 
   return (
     <aside className={`navbar ${isCollapsed ? 'collapsed' : ''}`} id="navbar">
       <button className="toggle-btn" id="toggleBtn" onClick={toggleNavbar}></button>
       <ul>
-        <li><Link href="../dashboard" data-title="Dashboard">Dashboard</Link></li>
-        <li><Link href="../inventory" data-title="Inventory">Inventory</Link></li>
-        <li><Link href="../membership" data-title="Membership">Membership</Link></li>
-        <li><Link href="../history" data-title="History">History</Link></li>
-        <li><Link href="../checkouts" data-title="Checkouts">Checkouts</Link></li>
+        <li><Link href="/dashboard" data-title="Dashboard">Dashboard</Link></li>
+        {currentPath === '/inventory' ?
+          (<li><Link href="/add_item" data-title="AddItem">Add Item</Link></li>) : (
+            <li><Link href="/inventory" data-title="Inventory">Inventory</Link></li>
+          )}
+        {currentPath === '/membership' ?
+          (<li><Link href="/add_member" data-title="AddMember">Add Member</Link></li>) : (
+            <li><Link href="/membership" data-title="Membership">Membership</Link></li>
+          )}
+        <li><Link href="/history" data-title="History">History</Link></li>
+        <li><Link href="/checkouts" data-title="Checkouts">Checkouts</Link></li>
+        {name === 'admin' && (
+          <li><Link href="/worker_management" data-title="workerManagement">Worker Management</Link></li>
+        )}
       </ul>
     </aside>
   );
