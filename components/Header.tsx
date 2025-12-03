@@ -3,17 +3,22 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 const Header = () => {
-  const [role, setRole] = useState<string | null>(null);  // Define role as string or null
+  const [name, setName] = useState<string | null>(null);  // Define role as string or null
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   useEffect(() => {
-    const savedRole = localStorage.getItem('role');
-    setRole(savedRole);
+    const savedName = localStorage.getItem('nama');
+    setName(savedName);
   }, []);
 
-  const getRoleText = () => {
-    if (role === 'admin') return 'Admin ▼';
-    if (role) return `${role.charAt(0).toUpperCase() + role.slice(1)} ▼`;
+  const getNameText = () => {
+    if (name === 'admin') return 'Admin ▼';
+    if (name) return `${name.charAt(0).toUpperCase() + name.slice(1)} ▼`;
     return 'Cashier ▼';
+  };
+
+  const toggleDropdown = () => {
+    setIsDropdownOpen(!isDropdownOpen);
   };
 
   return (
@@ -22,14 +27,14 @@ const Header = () => {
         <h1><span className="brand">TARUMART</span> <span className="tagline">Kasir</span></h1>
       </div>
       <div className="header-right">
-        <div className="employee-login" id="profileMenu">
-          <span className="cashier-name">{getRoleText()}</span>
+        <div className="employee-login" id="profileMenu" onClick={toggleDropdown}>
+          <span className="cashier-name">{getNameText()}</span>
           <div className="profile-icon">👤</div>
         </div>
 
         {/* Dropdown logout */}
-        <div className="dropdown" id="dropdownMenu">
-          <Link href="../login.html">
+        <div className={`dropdown ${isDropdownOpen ? 'show' : ''}`} id="dropdownMenu">
+          <Link href="/login">
             <img src="../img/logout.png" alt="Logout" className="dropdown-icon" />
             Logout
           </Link>
