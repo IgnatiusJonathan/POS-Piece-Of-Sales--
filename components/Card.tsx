@@ -30,121 +30,58 @@ export default function Kartu({
         }
     };
 
+    const itemLabelShape = {
+        clipPath: 'polygon(0% 100%, 100% 100%, 85% 0%, 0% 0%)',
+    };
+
     return (
         <div
-            className={`card-container relative border border-gray-200 shadow-md transition-all duration-250 ease-in-out 
-                        cursor-pointer hover:shadow-lg hover:border-B21011 active:scale-95 h-50 w-80 flex-shrink-0
-                        ${isActive ? 'border-FFBA01 shadow-lg' : ''}
+            className={`card-container bg-white border border-[#800000] rounded shadow-sm overflow-hidden group 
+                        hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col
+                        cursor-pointer active:scale-95 h-50 w-full
+                        
                         ${className}`}
             onClick={handleClick}
         >
-            <div
-                style={{
-                    backgroundColor: '#cb2626',
-                    clipPath: 'polygon(0 0, 100% 0, 100% 100%, 0% 100%)'
-                }}
-                className="absolute inset-0 z-0"
-            ></div>
-
-            <div
-                style={{
-                    backgroundColor: '#840505',
-                    clipPath: 'polygon(0 0, 80% 0, 95% 100%, 0% 100%)'
-                }}
-                className="absolute inset-0 z-10"
-            ></div>
-
-            <div
-                style={{
-                    backgroundColor: '#9E172F',
-                    clipPath: 'polygon(0 0, 100% 0%, 90% 50%, 0% 100%)'
-                }}
-                className="absolute top-0 left-0 w-3/4 h-10 z-20"
-            ></div>
-
-            <div
-                style={{
-                    backgroundColor: '#970505',
-                    clipPath: 'polygon(0 0, 95% 0, 100% 100%, 0% 100%)'
-                }}
-                className="absolute top-0 left-0 w-2/3 h-10 flex items-center px-3 z-30"
-            >
-                <h3
-                    style={{ color: 'white' }}
-                    className="product-name font-bold text-sm truncate"
-                >
-                    {barang.nama}
-                </h3>
+            <div className="w-full flex-1 flex items-center justify-center bg-gray-50 relative overflow-hidden">
+                {barang.gambar ? (
+                    <div className="relative w-full h-full p-2">
+                        <Image
+                            src={barang.gambar}
+                            alt={barang.nama}
+                            fill
+                            className="object-contain"
+                        />
+                    </div>
+                ) : (
+                    <span className="text-gray-300 text-xs font-medium">No Image</span>
+                )}
             </div>
 
-            <div style={{
-                backgroundColor: '#e90707',
-                clipPath: 'polygon(0 0, 80% 80%, 100% 100%, 0% 100%)'
-            }}
-                className="absolute bottom-0 left-0 w-1/1 h-15 flex items-center px-3 z-30"></div>
-
-            <div className="card-content absolute inset-0 pt-8 pb-3 px-3 flex flex-col z-40">
-                <div className="flex items-start gap-3 flex-1">
-                    <div className="flex-shrink-0">
-                        <div className="image-container relative">
-                            <Image
-                                src={barang.gambar}
-                                alt={barang.nama}
-                                width={60}
-                                height={60}
-                                className="w-30 h-30 object-contain rounded border border-gray-300 bg-white"
-                            />
-                        </div>
-                    </div>
-
-                    <div className="info flex-1 flex flex-col gap-1 min-w-0">
-                        <div className="flex items-center gap-2">
-                            <span
-                                style={{ color: 'white' }}
-                                className="id-label text-xs font-medium"
-                            >
-                                ID:
-                            </span>
-                            <span
-                                style={{
-                                    backgroundColor: '#840505',
-                                    color: 'white'
-                                }}
-                                className="id-value px-2 py-1 rounded text-xs font-bold"
-                            >
-                                {barang.barangID}
-                            </span>
-                        </div>
-
-                        <div className="price-section">
-                            <div
-                                style={{ color: 'white' }}
-                                className="price-text font-bold text-lg leading-tight"
-                            >
-                                Rp {barang.harga.toLocaleString()}
-                            </div>
-                        </div>
-                    </div>
+            <div
+                className="p-3 relative min-h-[60px] flex-shrink-0"
+                style={{
+                    background: "linear-gradient(to bottom right, #b91010, #840505)"
+                }}
+            >
+                <div
+                    className="absolute top-0 left-0 text-white text-[10px] px-4 py-1 font-bold tracking-wider shadow-sm"
+                    style={{
+                        ...itemLabelShape,
+                        transform: 'translateY(-100%)',
+                        background: "linear-gradient(to bottom right, #b91010, #840505)"
+                    }}
+                >
+                    {barang.barangID ? `ID: ${barang.barangID}` : 'ITEM'}
+                </div>
+                <div className="mt-1">
+                    <p className="text-white text-xs font-bold truncate">{barang.nama}</p>
+                    <p className="text-gray-200 text-[10px]">Rp {barang.harga.toLocaleString()}</p>
                 </div>
 
-                {/* Buat tampilin stok barang biar di inventory keliatan */}
                 {showQty && barang.stok !== undefined && (
-                    <div className="stock-container mt-2 flex items-center gap-3">
-                        <span
-                            style={{ color: 'white' }}
-                            className="stock-label text-xs font-medium"
-                        >
-                            Stok:
-                        </span>
-                        <span
-                            style={{
-                                backgroundColor: '#b91010',
-                                color: 'white'
-                            }}
-                            className="stock-value px-3 py-1 rounded text-xs font-bold"
-                        >
-                            {barang.stok} unit
-                        </span>
+                    <div className="mt-1 pt-1 border-t border-white/20">
+                        <p className="text-white/80 text-[10px]">Stok: {barang.stok}</p>
                     </div>
                 )}
             </div>
