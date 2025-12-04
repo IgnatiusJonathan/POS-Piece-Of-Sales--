@@ -17,10 +17,7 @@ export default function PrintPage() {
   if (!transaksi) {
     return (
       <div
-        className="min-h-screen flex items-center justify-center"
-        style={{
-          background: "linear-gradient(to bottom right, #d31616, #7C0922)"
-        }}
+        className="min-h-screen flex items-center justify-center bg-white"
       >
         <div className="text-center p-8 rounded-lg shadow-lg border-l-4"
           style={{
@@ -43,12 +40,9 @@ export default function PrintPage() {
 
   return (
     <div
-      className="min-h-screen p-4 flex flex-col items-center print:bg-white print:p-0"
-      style={{
-        background: "linear-gradient(to bottom right, #d31616, #7C0922)"
-      }}
+      className="min-h-screen p-4 flex flex-col items-center bg-gray-200 print:bg-white print:p-0"
     >
-      <div className="rounded-lg shadow-lg w-full max-w-md print:shadow-none print:w-full print:max-w-none print:p-0 print:rounded-none"
+      <div className="rounded-lg shadow-2xl shadow-black/40 w-full max-w-md print:shadow-none print:w-full print:max-w-none print:p-0 print:rounded-none"
         style={{
           background: "white",
           borderLeft: "4px solid #FFBA01"
