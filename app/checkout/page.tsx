@@ -1,99 +1,88 @@
 "use client";
 import { useState, useEffect } from 'react';
-
-
-interface Barang {
-  barangID: string;
-  nama: string;
-  harga: number;
-  gambar: string;
-  stok?: number;
-}
-
-const sampleBarang: Barang[] = [
-  {
-    barangID: "1",
-    nama: "chitato",
-    harga: 10000,
-    gambar: "/images/chitato.jpg",
-    stok: 50,
-  },
-  {
-    barangID: "2", 
-    nama: "Indomie Goreng",
-    harga: 3000,
-    gambar: "/images/indomieGoreng.jpg",
-    stok: 100
-  },
-  {
-    barangID: "3",
-    nama: "Aqua 600ml", 
-    harga: 5000,
-    gambar: "/images/aqua600.jpg",
-    stok: 80
-  }
-];
+import Card from '@/components/Card';
+import Navbar from '@/components/Navbar';
+import SearchBar from '@/components/SearchBar';
+import KartBelanja, { ItemKeranjang } from '@/components/KartBelanja';
+import FormPembayaran from '@/components/FormPembayaran';
+import Content from '@/components/content';
+import { Product } from '@prisma/client';
+import Header from '@/components/Header';
 
 export default function CheckoutPage() {
-  const [barangs, setBarangs] = useState<Barang[]>([]);
+  const [barangs, setBarangs] = useState<Product[]>([]);
+  const [filteredBarangs, setFilteredBarangs] = useState<Product[]>([]);
+  const [keranjang, setKeranjang] = useState<ItemKeranjang[]>([]);
 
   useEffect(() => {
-    const dataInventory = localStorage.getItem('ProductID');
-    
-    if (!dataInventory) {
-      localStorage.setItem('ProductID', JSON.stringify(sampleBarang));
-      setBarangs(sampleBarang);
-    } else {
-      const inventory = JSON.parse(dataInventory);
-      setBarangs(inventory);
+    async function fetchProducts() {
+      const res = await fetch("/api/product");
+      const data = await res.json();
+      setBarangs(data);
+      setFilteredBarangs(data);
+
     }
+    fetchProducts();
   }, []);
 
+  const tambahKeKeranjang = (barang: Product) => {
+    setKeranjang(prev => {
+      const existingItem = prev.find(item => item.id === barang.id);
+
+      if (existingItem) {
+        return prev.map(item =>
+          item.id === barang.id
+            ? { ...item, jumlah: item.jumlah + 1 }
+            : item
+        );
+      } else {
+        return [...prev, { ...barang, jumlah: 1 }];
+      }
+    });
+  };
+
+  const totalHarga = keranjang.reduce((total, item) => total + (item.harga * item.jumlah), 0);
+
   return (
-    <div className="container-fluid">
-      <div className="d-flex justify-content-between align-items-center mb-4">
-        <h1 className="text-danger">Checkout Page</h1>
-        <a href="/inventory" className="btn btn-outline-danger">
-          Ke Inventory
-        </a>
-      </div>
+    <div className="flex flex-col min-h-screen bg-gray-100">
+      <Header />
+      <Navbar />
 
-      <p className="text-muted">Ada {barangs.length} barang yang ada pada inventory</p>
+      <Content>
+        <div className="checkout-container flex flex-col lg:flex-row gap-5 h-full p-2.5 relative overflow-visible flex-1">
+          <div className="kiri flex-3 bg-white rounded-lg p-5 shadow-md flex flex-col relative overflow-visible w-full lg:w-2/3">
+            <SearchBar
+              data={barangs}
+              onSearch={setFilteredBarangs}
+              keySearch="nama"
+              placeholder="Cari produk di sini..."
+            />
 
-      <div className="row">
-        {barangs.length === 0 ? (
-          <div className="col-12 text-center py-5">
-            <p className="text-muted">Belum ada barang di inventory</p>
-          </div>
-        ) : (
-          barangs.map(barang => (
-            <div key={barang.barangID} className="col-md-4 mb-3">
-              <div className="card h-100">
-                <img 
-                  src={barang.gambar} 
-                  alt={barang.nama}
-                  className="card-img-top"
-                  style={{ height: '150px', objectFit: 'cover' }}
+            <div className="daftar-item grid grid-cols-[repeat(auto-fill,minmax(200px,1fr))] gap-4 overflow-y-auto flex-1 p-2.5 relative">
+              {filteredBarangs.map(barang => (
+                <Card
+                  key={barang.id}
+                  barang={barang}
+                  onClick={tambahKeKeranjang}
+                  showQty={false}
                 />
-                <div className="card-body">
-                  <h6>{barang.nama}</h6>
-                  <p className="text-danger fw-bold">Rp {barang.harga.toLocaleString()}</p>
-                  {barang.stok !== undefined && (
-                    <small className={`badge ${barang.stok > 0 ? 'bg-success' : 'bg-danger'}`}>
-                      Stok: {barang.stok}
-                    </small>
-                  )}
-                </div>
-                <div className="card-footer">
-                  <button className="btn btn-danger btn-sm w-100" disabled>
-                    Tambah ke Keranjang
-                  </button>
-                </div>
-              </div>
+              ))}
             </div>
-          ))
-        )}
-      </div>
+          </div>
+
+          <div className="kanan flex-1 flex flex-col gap-5 w-full lg:w-1/3">
+            <KartBelanja
+              keranjang={keranjang}
+              setKeranjang={setKeranjang}
+            />
+
+            <FormPembayaran
+              keranjang={keranjang}
+              totalHarga={totalHarga}
+            />
+          </div>
+        </div>
+      </Content>
     </div>
   );
 }
