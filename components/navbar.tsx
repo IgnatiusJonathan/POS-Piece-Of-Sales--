@@ -7,12 +7,22 @@ import { useState, useEffect } from 'react';
 
 const Navbar = () => {
   const { isCollapsed, toggleNavbar } = useNavbar();
-  const currentPath = usePathname();
-  const [name, setName] = useState<string | null>(null);
+  const currentPath = usePathname(); //buat bisa menutup/buka akses halaman tertentu tergantung halaman sekarang
+  const [name, setName] = useState<string | null>(null); // Null buat awal2 testing pas gk ada session (buat worker management)
   useEffect(() => {
+    //update nama pas udh logged in
+    const updateName = () => {
       const savedName = localStorage.getItem('nama');
       setName(savedName);
-    }, []);
+    };
+
+    updateName();
+    //update navbar
+    window.addEventListener('session-update', updateName);
+    return () => {
+      window.removeEventListener('session-update', updateName);
+    };
+  }, []);
 
   return (
     <aside className={`navbar ${isCollapsed ? 'collapsed' : ''}`} id="navbar">
@@ -28,7 +38,7 @@ const Navbar = () => {
             <li><Link href="/membership" data-title="Membership">Membership</Link></li>
           )}
         <li><Link href="/history" data-title="History">History</Link></li>
-        <li><Link href="/checkout" data-title="Checkout">Checkout</Link></li>
+        <li><Link href="/checkouts" data-title="Checkouts">Checkouts</Link></li>
         {name === 'admin' && (
           <li><Link href="/worker_management" data-title="workerManagement">Worker Management</Link></li>
         )}

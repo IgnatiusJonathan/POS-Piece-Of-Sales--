@@ -3,13 +3,28 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 
 const Header = () => {
-  const [name, setName] = useState<string | null>(null);  // Define role as string or null
+  const [name, setName] = useState<string | null>(null);  // Null buat awal2 testing pas gk ada session
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
   useEffect(() => {
-    const savedName = localStorage.getItem('nama');
-    setName(savedName);
+    //update nama pas udh logged in
+    const updateName = () => {
+      const savedName = localStorage.getItem('nama');
+      setName(savedName);
+    };
+
+    updateName();
+    window.addEventListener('session-update', updateName);
+    return () => window.removeEventListener('session-update', updateName);
   }, []);
+
+  const handleLogout = () => {
+    //remove semua data logged in user pas logout
+    localStorage.removeItem('currentSession');
+    localStorage.removeItem('nama');
+    window.dispatchEvent(new Event('session-update'));
+    setIsDropdownOpen(false);
+  };
 
   const getNameText = () => {
     if (name === 'admin') return 'Admin ▼';
@@ -34,7 +49,7 @@ const Header = () => {
 
         {/* Dropdown logout */}
         <div className={`dropdown ${isDropdownOpen ? 'show' : ''}`} id="dropdownMenu">
-          <Link href="/login">
+          <Link href="/login" onClick={handleLogout}>
             <img src="../img/logout.png" alt="Logout" className="dropdown-icon" />
             Logout
           </Link>
