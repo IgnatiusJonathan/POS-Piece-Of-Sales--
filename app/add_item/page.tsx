@@ -3,7 +3,6 @@ import { useState } from "react";
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import Navbar from "@/components/navbar";
-import Link from "next/link";
 import { useNavbar } from "@/context/NavbarContext";
 import { useRouter } from "next/navigation";
 
