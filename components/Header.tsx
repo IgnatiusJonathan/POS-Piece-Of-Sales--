@@ -50,7 +50,7 @@ const Header = () => {
         {/* Dropdown logout */}
         <div className={`dropdown ${isDropdownOpen ? 'show' : ''}`} id="dropdownMenu">
           <Link href="/login" onClick={handleLogout}>
-            <img src="../img/logout.png" alt="Logout" className="dropdown-icon" />
+            <img src="/images/logout.png" alt="Logout" className="dropdown-icon" />
             Logout
           </Link>
         </div>

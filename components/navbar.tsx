@@ -38,7 +38,7 @@ const Navbar = () => {
             <li><Link href="/membership" data-title="Membership">Membership</Link></li>
           )}
         <li><Link href="/history" data-title="History">History</Link></li>
-        <li><Link href="/checkouts" data-title="Checkouts">Checkouts</Link></li>
+        <li><Link href="/checkout" data-title="Checkouts">Checkouts</Link></li>
         {name === 'admin' && (
           <li><Link href="/worker_management" data-title="workerManagement">Worker Management</Link></li>
         )}

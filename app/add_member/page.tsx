@@ -1,8 +1,8 @@
 "use client";
 import { useState } from "react";
-import Footer from "@/components/footer";
+import Footer from "@/components/Footer";
 import Header from "@/components/Header";
-import Navbar from "@/components/navbar";
+import Navbar from "@/components/Navbar";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
@@ -37,13 +37,14 @@ export default function AddMembershipPage() {
             });
 
             if (!response.ok) {
-                throw new Error('Failed to add member');
+                const errorData = await response.json().catch(() => null);
+                throw new Error(errorData?.error || 'Failed to add member');
             }
 
             router.push('/membership');
         } catch (error) {
             console.error('Error adding member:', error);
-            alert('Gagal menambahkan member. Silakan coba lagi.');
+            alert(`Gagal menambahkan member: ${error instanceof Error ? error.message : 'Terjadi kesalahan'}`);
             setIsSubmitting(false);
         }
     };
