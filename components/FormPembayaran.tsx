@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { ItemKeranjang } from './KartBelanja';
 
@@ -15,11 +15,19 @@ export default function FormPembayaran({
     const [namaPembeli, setNamaPembeli] = useState('');
     const [metodePembayaran, setMetodePembayaran] = useState('tunai');
     const [nominalTunai, setNominalTunai] = useState('');
+    const [namaKasir, setNamaKasir] = useState('Kasir');
+
+    useEffect(() => {
+        const storedNama = localStorage.getItem('nama');
+        if (storedNama) {
+            setNamaKasir(storedNama);
+        }
+    }, []);
 
     const kembalian = metodePembayaran === 'tunai' ? Math.max(0, (parseFloat(nominalTunai) || 0) - totalHarga) : 0;
     const isKeranjangKosong = keranjang.length === 0;
 
-    const handleCheckout = () => {
+    const handleCheckout = async () => {
         if (keranjang.length === 0) {
             alert('Keranjang belanja kosong!');
             return;
@@ -30,17 +38,41 @@ export default function FormPembayaran({
             return;
         }
 
+        const now = new Date();
+        const nomor = `TRX-${now.getFullYear()}${(now.getMonth() + 1).toString().padStart(2, '0')}${now.getDate().toString().padStart(2, '0')}-${now.getHours().toString().padStart(2, '0')}${now.getMinutes().toString().padStart(2, '0')}${now.getSeconds().toString().padStart(2, '0')}`;
+
         const transaksi = {
-            items: keranjang,
+            nomor,
+            items: keranjang.map(item => ({
+                id: item.id,
+                nama: item.nama,
+                jumlah: item.jumlah,
+                hargaSatuan: item.harga,
+                hargaTotalBarang: item.harga * item.jumlah
+            })),
             totalHarga,
             nominalTunai: parseFloat(nominalTunai) || 0,
             kembalian,
             metodePembayaran,
             namaPembeli: namaPembeli || 'Umum',
-            tanggal: new Date().toLocaleString()
+            namaKasir,
+            tanggal: now.toLocaleString()
         };
 
         localStorage.setItem('transaksiTerakhir', JSON.stringify(transaksi));
+
+        await fetch('/api/history', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({
+                items: keranjang,
+                namaKasir,
+                namaPembeli: namaPembeli || 'Umum',
+            }),
+        });
+
 
         router.push('/print');
     };
