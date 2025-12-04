@@ -1,8 +1,6 @@
 'use server'
 
-import { PrismaClient } from '@prisma/client'
-
-const prisma = new PrismaClient()
+import prisma from '@/lib/prisma'
 
 export async function getWorkers() {
   const workers = await prisma.worker.findMany()
@@ -10,6 +8,7 @@ export async function getWorkers() {
 }
 
 export async function createWorker(data: { id: string; nama: string; email: string; password?: string }) {
+
   const existing = await prisma.worker.findUnique({
     where: { id: data.id }
   })
@@ -23,7 +22,7 @@ export async function createWorker(data: { id: string; nama: string; email: stri
       id: data.id,
       nama: data.nama,
       email: data.email,
-      password: "####",
+      password: data.password || "####",
       produkTerjual: 0,
       absensi: "0/30",
       jamKerja: 0,
@@ -40,4 +39,23 @@ export async function deleteWorker(id: string) {
       id: id,
     },
   })
+}
+
+export async function verifyWorkerLogin(id: string, passwordAttempt: string) {
+  const worker = await prisma.worker.findUnique({
+    where: { id: id }
+  })
+
+  if (worker && worker.password === passwordAttempt) {
+    return {
+      success: true,
+      worker: {
+        id: worker.id,
+        nama: worker.nama,
+        email: worker.email
+      }
+    }
+  }
+
+  return { success: false }
 }

@@ -20,6 +20,7 @@ interface Worker {
 export default function WorkerManagementPage() {
   const [mounted, setMounted] = useState(false);
   const [workers, setWorkers] = useState<Worker[]>([]);
+  const [searchTerm, setSearchTerm] = useState('');
   
   const [formData, setFormData] = useState({ name: '', id: '', email: '', password: '' });
 
@@ -68,7 +69,10 @@ export default function WorkerManagementPage() {
     }
   };
 
-  const filteredWorkers = workers;
+  const filteredWorkers = workers.filter(w => 
+    w.nama.toLowerCase().includes(searchTerm.toLowerCase()) || 
+    w.id.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   const calculateAttendance = (absensi: string | null) => {
     if (!absensi) return 'N/A';
@@ -115,6 +119,13 @@ export default function WorkerManagementPage() {
           <section className="lg:col-span-2 space-y-6">
             <div className="flex justify-between items-center gap-4">
               <h3 className="text-xl font-semibold whitespace-nowrap text-gray-900">Staff Roster</h3>
+              <input 
+                  type="text" 
+                  value={searchTerm} 
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  placeholder="Cari Nama atau ID..."
+                  className="px-4 py-2 w-full max-w-xs bg-white border border-gray-300 rounded-lg text-sm text-gray-900 outline-none focus:border-[var(--maroon)]"
+              />
             </div>
 
             <div className="grid grid-cols-1 gap-4">
@@ -153,7 +164,7 @@ export default function WorkerManagementPage() {
 
                 </div>
               ))}
-              {filteredWorkers.length === 0 && <div className="py-12 text-center text-gray-400 border-2 border-dashed border-gray-200 rounded-xl">No workers found in database.</div>}
+              {filteredWorkers.length === 0 && <div className="py-12 text-center text-gray-400 border-2 border-dashed border-gray-200 rounded-xl">No workers found.</div>}
             </div>
           </section>
 
