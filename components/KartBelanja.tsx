@@ -20,6 +20,12 @@ export default function KartBelanja({
             return;
         }
 
+        const item = keranjang.find(item => item.id === id);
+        if (item && newJumlah > item.stok) {
+            alert(`Stok tidak mencukupi! Stok tersisa: ${item.stok}`);
+            return;
+        }
+
         setKeranjang(prev =>
             prev.map(item =>
                 item.id === id
