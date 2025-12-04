@@ -9,8 +9,10 @@ import Content from '@/components/content';
 import { Product } from '@prisma/client';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
+import { useNavbar } from '@/context/NavbarContext';
 
 export default function CheckoutPage() {
+  const { isCollapsed, toggleNavbar } = useNavbar();
   const [barangs, setBarangs] = useState<Product[]>([]);
   const [filteredBarangs, setFilteredBarangs] = useState<Product[]>([]);
   const [keranjang, setKeranjang] = useState<ItemKeranjang[]>([]);
@@ -32,6 +34,12 @@ export default function CheckoutPage() {
       }
     }
     fetchProducts();
+  }, []);
+
+  useEffect(() => {
+    if (!isCollapsed) {
+      toggleNavbar();
+    }
   }, []);
 
   const tambahKeKeranjang = (barang: Product) => {
