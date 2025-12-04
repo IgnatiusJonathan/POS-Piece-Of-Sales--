@@ -16,29 +16,44 @@ export default function CheckoutPage() {
 
   useEffect(() => {
     async function fetchProducts() {
-      const res = await fetch("/api/product");
-      const data = await res.json();
-      setBarangs(data);
-      setFilteredBarangs(data);
-
+      const res = await fetch(`/api/product?t=${Date.now()}`);
+      if (res.ok) {
+        const data = await res.json();
+        if (Array.isArray(data)) {
+          setBarangs(data);
+          setFilteredBarangs(data);
+        } else {
+          console.error("Data yang diambil bukan array:", data);
+        }
+      } else {
+        console.error("Gagal mengambil produk");
+      }
     }
     fetchProducts();
   }, []);
 
   const tambahKeKeranjang = (barang: Product) => {
-    setKeranjang(prev => {
-      const existingItem = prev.find(item => item.id === barang.id);
+    const existingItem = keranjang.find(item => item.id === barang.id);
 
-      if (existingItem) {
-        return prev.map(item =>
+    if (existingItem) {
+      if (existingItem.jumlah + 1 > barang.stok) {
+        alert(`Stok tidak mencukupi! Stok tersisa: ${barang.stok}`);
+        return;
+      }
+      setKeranjang(prev =>
+        prev.map(item =>
           item.id === barang.id
             ? { ...item, jumlah: item.jumlah + 1 }
             : item
-        );
-      } else {
-        return [...prev, { ...barang, jumlah: 1 }];
+        )
+      );
+    } else {
+      if (1 > barang.stok) {
+        alert(`Stok tidak mencukupi! Stok tersisa: ${barang.stok}`);
+        return;
       }
-    });
+      setKeranjang(prev => [...prev, { ...barang, jumlah: 1 }]);
+    }
   };
 
   const totalHarga = keranjang.reduce((total, item) => total + (item.harga * item.jumlah), 0);
