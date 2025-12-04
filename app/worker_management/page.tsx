@@ -10,11 +10,6 @@ interface Worker {
   id: string;
   nama: string;
   email: string;
-  produkTerjual: number;
-  absensi: string;
-  jamKerja: number;
-  gaji: number;
-  performa: number;
 }
 
 export default function WorkerManagementPage() {
@@ -74,21 +69,6 @@ export default function WorkerManagementPage() {
     w.id.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
-  const calculateAttendance = (absensi: string | null) => {
-    if (!absensi) return 'N/A';
-    const parts = absensi.split('/');
-    if (parts.length < 2) return 'N/A';
-    const attended = Number(parts[0]);
-    const total = Number(parts[1]);
-    if (!total) return 'N/A';
-    return `${Math.round((attended / total) * 100)}%`;
-  };
-
-  const renderStars = (rating: number | null) => {
-    if (!rating) return <span className="text-gray-400">N/A</span>;
-    return <span className="text-yellow-500">{'★'.repeat(Math.floor(rating))} <span className="text-gray-500 text-xs">({rating})</span></span>;
-  };
-
   if (!mounted) return null;
 
   return (
@@ -103,14 +83,12 @@ export default function WorkerManagementPage() {
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
           <div>
             <h2 className="text-3xl font-bold text-gray-900">Team Overview</h2>
-            <p className="text-gray-500 mt-1">Manage staff, track performance, and create accounts.</p>
+            <p className="text-gray-500 mt-1">Manage staff and create accounts.</p>
           </div>
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
           <StatCard label="Jumlah Karyawan" value={workers.length} sub="Active Staff" />
-          <StatCard label="Barang Terjual" value="1240" sub="Total Items" />
-          <StatCard label="Total Produk" value="312" sub="In Stock" />
           <StatCard label="Last Update" value="07 Okt 2025" sub="14:32" />
         </div>
 
@@ -131,35 +109,13 @@ export default function WorkerManagementPage() {
             <div className="grid grid-cols-1 gap-4">
               {filteredWorkers.map((worker, index) => (
                 <div key={index} className="group relative bg-white border border-gray-200 rounded-xl p-5 hover:shadow-md transition-all">
-                  
-                  <div className="flex-1 grid grid-cols-2 sm:grid-cols-3 gap-y-4 gap-x-2 text-sm">
-                      <div className="col-span-2 sm:col-span-3 mb-2 flex justify-between">
-                          <div>
-                              <h4 className="font-bold text-lg text-gray-900">{worker.nama}</h4>
-                              <span className="text-xs font-mono text-gray-500 bg-gray-100 px-2 py-0.5 rounded">{worker.id}</span>
-                          </div>
-                           <button onClick={() => removeWorker(worker.id)} className="text-xs text-red-600 border border-red-600 px-3 py-1 rounded hover:bg-red-600 hover:text-white transition-colors h-fit">REMOVE</button>
+                  <div className="flex justify-between items-center">
+                      <div className="flex flex-col">
+                          <h4 className="font-bold text-lg text-gray-900">{worker.nama}</h4>
+                          <span className="text-xs font-mono text-gray-500 bg-gray-100 px-2 py-0.5 rounded w-fit mt-1">{worker.id}</span>
+                          <span className="text-sm text-gray-500 mt-2">{worker.email}</span>
                       </div>
-                      <div>
-                        <p className="text-xs text-gray-500">Produk Terjual</p>
-                        <p className="font-medium text-gray-900">{worker.produkTerjual ?? 0}</p>
-                      </div>
-                      <div>
-                        <p className="text-xs text-gray-500">Absensi</p>
-                        <p className="font-medium text-gray-900">{calculateAttendance(worker.absensi)}</p>
-                      </div>
-                      <div>
-                        <p className="text-xs text-gray-500">Jam Kerja/Mg</p>
-                        <p className="font-medium text-gray-900">{worker.jamKerja ? `${worker.jamKerja} jam` : '0 jam'}</p>
-                      </div>
-                      <div>
-                        <p className="text-xs text-gray-500">Gaji</p>
-                        <p className="font-medium text-gray-900">{worker.gaji ? `Rp ${worker.gaji.toLocaleString('id-ID')}` : '0'}</p>
-                      </div>
-                      <div className="col-span-2">
-                        <p className="text-xs text-gray-500">Performa</p>
-                        <p className="text-gray-900">{renderStars(worker.performa)}</p>
-                      </div>
+                       <button onClick={() => removeWorker(worker.id)} className="text-xs text-red-600 border border-red-600 px-4 py-2 rounded hover:bg-red-600 hover:text-white transition-colors h-fit">REMOVE</button>
                   </div>
 
                 </div>

@@ -19,15 +19,9 @@ export async function createWorker(data: { id: string; nama: string; email: stri
 
   const newWorker = await prisma.worker.create({
     data: {
-      id: data.id,
       nama: data.nama,
       email: data.email,
       password: data.password || "####",
-      produkTerjual: 0,
-      absensi: "0/30",
-      jamKerja: 0,
-      gaji: 0,
-      performa: 0.0,
     },
   })
   return newWorker
