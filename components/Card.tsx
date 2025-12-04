@@ -39,11 +39,10 @@ export default function Kartu({
             <div className="w-full flex-1 flex items-center justify-center bg-gray-50 relative overflow-hidden">
                 {barang.image ? (
                     <div className="relative w-full h-full p-2">
-                        <Image
+                        <img
                             src={barang.image}
                             alt={barang.nama}
-                            fill
-                            className="object-contain"
+                            className="w-full h-full object-contain"
                         />
                     </div>
                 ) : (
