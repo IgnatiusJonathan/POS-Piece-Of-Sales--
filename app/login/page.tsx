@@ -40,8 +40,6 @@ function Login() {
 
                 localStorage.setItem('currentSession', JSON.stringify(sessionData));
                 localStorage.setItem('nama', result.worker.nama);
-
-                //Buat bikin header & navbar reload dengan data yg bener
                 window.dispatchEvent(new Event('session-update'));
 
                 setTimeout(() => {

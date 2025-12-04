@@ -35,7 +35,7 @@ export async function deleteWorker(id: string) {
   })
 }
 
-export async function verifyWorkerLogin(id: string, passwordAttempt: string) {
+export async function verifyWorkerLogin(id: number, passwordAttempt: string) {
   const worker = await prisma.worker.findUnique({
     where: { id: id }
   })

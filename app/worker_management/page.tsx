@@ -16,7 +16,6 @@ export default function WorkerManagementPage() {
   const [mounted, setMounted] = useState(false);
   const [workers, setWorkers] = useState<Worker[]>([]);
   const [searchTerm, setSearchTerm] = useState('');
-  
   const [formData, setFormData] = useState({ name: '', id: '', email: '', password: '' });
 
   useEffect(() => {
