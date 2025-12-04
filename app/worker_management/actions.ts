@@ -6,6 +6,26 @@ export async function getWorkers() {
   return await prisma.worker.findMany()
 }
 
+export async function getHistory() {
+  return await prisma.history.findMany()
+}
+
+export async function getProducts() {
+  return await prisma.product.findMany()
+}
+
+export async function getLastUpdate() {
+  const lastEntry = await prisma.history.findFirst({
+    orderBy: {
+      tanggal: 'desc'
+    },
+    select: {
+      tanggal: true
+    }
+  })
+  return lastEntry?.tanggal || null
+}
+
 export async function createWorker(data: { nama: string; email: string; password?: string }) {
   const newWorker = await prisma.worker.create({
     data: {
