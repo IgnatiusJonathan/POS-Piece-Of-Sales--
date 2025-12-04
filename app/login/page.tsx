@@ -12,16 +12,22 @@ function Login() {
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
-        
+
         if (!employeeID || !password) {
             setLoginMsg("Please enter both Employee ID and Password.");
+            return;
+        }
+
+        const employeeIdNum = parseInt(employeeID, 10);
+        if (isNaN(employeeIdNum)) {
+            setLoginMsg("Employee ID must be a valid number.");
             return;
         }
 
         setLoginMsg(`Verifying credentials...`);
 
         try {
-            const result = await verifyWorkerLogin(employeeID, password);
+            const result = await verifyWorkerLogin(employeeIdNum, password);
 
             if (result.success && result.worker) {
                 setLoginMsg("Login successful! Redirecting...");
@@ -31,9 +37,11 @@ function Login() {
                     loginTime: new Date().toISOString(),
                     status: 'Active'
                 };
-                
+
                 localStorage.setItem('currentSession', JSON.stringify(sessionData));
-                
+                localStorage.setItem('nama', result.worker.nama);
+                window.dispatchEvent(new Event('session-update'));
+
                 setTimeout(() => {
                     router.push('/dashboard');
                 }, 500);
@@ -47,7 +55,7 @@ function Login() {
 
     return (
         <div className="min-h-screen bg-gray-50 font-sans text-gray-900">
-            
+
             <header className="header">
                 <div className="header-left">
                     <h1><span className="brand">TARUMART</span> <span className="tagline">Kasir</span></h1>
@@ -65,7 +73,6 @@ function Login() {
                                 id="employeeID"
                                 name="employeeID"
                                 className="w-full bg-white border border-gray-300 rounded p-2 text-sm text-gray-900 outline-none focus:border-[var(--maroon)]"
-                                required
                                 value={employeeID}
                                 onChange={(e) => setEmployeeID(e.target.value)}
                             />
@@ -78,14 +85,13 @@ function Login() {
                                 id="employeePassword"
                                 name="employeePassword"
                                 className="w-full bg-white border border-gray-300 rounded p-2 text-sm text-gray-900 outline-none focus:border-[var(--maroon)]"
-                                required
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                             />
                         </div>
 
-                        <button 
-                            type="submit" 
+                        <button
+                            type="submit"
                             className="w-full bg-[var(--maroon)] text-white font-bold py-3 rounded-lg hover:bg-[var(--hover)] transition-opacity mt-4 shadow-md"
                         >
                             Login
