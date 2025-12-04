@@ -66,13 +66,13 @@ export default function InventoryPage() {
         </div>
 
         <div
-          className="flex-1 min-h-screen bg-white transition-all duration-300"
+          className="flex-1 h-screen overflow-y-auto bg-white transition-all duration-300"
           style={{ marginLeft: isCollapsed ? "80px" : "220px" }}
         >
           <div className="pt-[80px] px-8 pb-4 bg-white sticky top-0 z-20">
             <SearchBar
               data={products}
-              onSearch={() => {}}
+              onSearch={() => { }}
               keySearch="nama"
               placeholder="Cari barang..."
             />
@@ -100,12 +100,11 @@ export default function InventoryPage() {
                         clipPath: "polygon(0% 100%, 100% 100%, 90% 0%, 0% 0%)",
                       }}
                       className={`
-                        px-8 py-2 font-bold text-xs tracking-wide leading-[0.9] pb-3
+                        px-5 py-2 font-bold text-xs tracking-wide leading-tight pb-3
                         ${index !== 0 ? "-ml-4" : ""}
-                        ${
-                          isActive
-                            ? "bg-white text-[#800000] z-20 h-[40px]"
-                            : "bg-[#600000] text-gray-300 hover:bg-[#700000] hover:text-white z-0 h-[35px]"
+                        ${isActive
+                          ? "bg-white text-[#800000] z-20 min-h-[40px] h-auto"
+                          : "bg-[#600000] text-gray-300 hover:bg-[#700000] hover:text-white z-0 min-h-[35px] h-auto"
                         }
                       `}
                     >
@@ -123,7 +122,7 @@ export default function InventoryPage() {
                   Inventori kosong
                 </p>
               ) : (
-                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8">
+                <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
                   {filteredProducts.map((item) => (
                     <div
                       key={item.id}
@@ -145,34 +144,32 @@ export default function InventoryPage() {
 
                       <div className="bg-[#800000] p-3 relative min-h-[60px]">
                         <div
-                          className="absolute top-0 left-0 bg-[#800000] text-white text-[10px] px-4 py-1 font-bold tracking-wider shadow-sm"
+                          className="absolute top-0 left-0 bg-[#800000] text-white text-[10px] px-3 py-1 font-bold tracking-wider shadow-sm truncate w-[60%] text-left"
                           style={{
                             clipPath: "polygon(0% 100%, 100% 100%, 85% 0%, 0% 0%)",
-                            transform: "translateY(-100%)",
+                            transform: "translateY(-95%)",
                           }}
                         >
-                          ITEM
+                          {item.nama.toUpperCase()}
                         </div>
 
-                        <div className="mt-1">
-                          <p className="text-white text-xs font-bold">
-                            {item.nama}
-                          </p>
+                        <div className="mt-2 flex justify-between items-end">
+                          <div className="flex flex-col">
+                            <span className="text-[10px] text-gray-300 font-medium">Harga</span>
+                            <span className="text-white text-sm font-bold">
+                              Rp {item.harga.toLocaleString()}
+                            </span>
+                          </div>
 
-                          <p className="text-gray-200 text-[10px]">
-                            Rp {item.harga.toLocaleString()}
-                          </p>
-
-                          <p className="text-[11px] mt-1 font-bold text-white">
-                            Stok:{" "}
+                          <div className="flex flex-col items-end">
+                            <span className="text-[10px] text-gray-300 font-medium">Stok</span>
                             <span
-                              className={
-                                item.stok < 5 ? "text-red-500" : "text-white"
-                              }
+                              className={`text-sm font-bold ${item.stok < 5 ? "text-red-500" : "text-white"
+                                }`}
                             >
                               {item.stok}
                             </span>
-                          </p>
+                          </div>
                         </div>
 
                         <button
@@ -189,7 +186,6 @@ export default function InventoryPage() {
                 </div>
               )}
 
-              {/* CATEGORY NAVIGATION BUTTONS (BOTTOM CENTER) */}
               <div className="flex justify-center items-center gap-6 mt-10">
                 <button
                   onClick={prevCategory}
@@ -247,8 +243,8 @@ export default function InventoryPage() {
               </div>
             )}
           </div>
-        </div>
-      </div>
+        </div >
+      </div >
 
       <Footer />
     </>
