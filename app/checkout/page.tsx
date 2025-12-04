@@ -8,6 +8,7 @@ import FormPembayaran from '@/components/FormPembayaran';
 import Content from '@/components/content';
 import { Product } from '@prisma/client';
 import Header from '@/components/Header';
+import Footer from '@/components/Footer';
 
 export default function CheckoutPage() {
   const [barangs, setBarangs] = useState<Product[]>([]);
@@ -26,7 +27,8 @@ export default function CheckoutPage() {
           console.error("Data yang diambil bukan array:", data);
         }
       } else {
-        console.error("Gagal mengambil produk");
+        const errorData = await res.json().catch(() => null);
+        console.error("Gagal mengambil produk:", errorData?.error || res.statusText);
       }
     }
     fetchProducts();
@@ -98,6 +100,7 @@ export default function CheckoutPage() {
           </div>
         </div>
       </Content>
+      <Footer />
     </div>
   );
 }
