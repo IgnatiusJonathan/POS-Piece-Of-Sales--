@@ -26,7 +26,7 @@ export default function ProductDetailModal({ product, onClose }: ProductDetailMo
                     <strong>Stok:</strong>{" "}
                     <span
                         className={
-                            product.stok < 5
+                            product.stok <= 5
                                 ? "text-red-500 font-bold"
                                 : "font-bold"
                         }

@@ -49,7 +49,7 @@ export default function InventoryCard({ item, onSelectProduct }: InventoryCardPr
                     <div className="flex flex-col items-end">
                         <span className="text-[10px] text-gray-300 font-medium">Stok</span>
                         <span
-                            className={`text-sm font-bold ${item.stok < 5 ? "text-red-500" : "text-white"
+                            className={`text-sm font-bold ${item.stok <= 5 ? "text-red-500" : "text-white"
                                 }`}
                         >
                             {item.stok}

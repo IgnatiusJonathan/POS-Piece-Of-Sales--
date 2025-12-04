@@ -14,6 +14,22 @@ pnpm dev
 bun dev
 ```
 
+## Database Setup
+
+
+
+```bash
+# 1. Generate Prisma Client
+npx prisma generate
+
+# 2. Push schema to database
+npx prisma db push
+
+# 3. Seed the database
+npx prisma db seed
+```
+
+
 Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
 
 You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
