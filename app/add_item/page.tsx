@@ -47,6 +47,12 @@ export default function AddItemPage() {
         setSuccessMessage('');
         setErrorMessage('');
 
+        if (formData.stok <= 0) {
+            setErrorMessage("Stok tidak boleh kurang dari 1.");
+            setLoading(false);
+            return;
+        }
+
         try {
             const res = await fetch("/api/product", {
                 method: "POST",
@@ -98,7 +104,7 @@ export default function AddItemPage() {
                     <div className="px-6 mb-10 max-w-6xl">
                         <div className="bg-[#800000] rounded-t-lg px-6 flex items-center h-[50px] shadow-sm">
                             <span className="text-white font-bold text-sm tracking-wide">
-                                FORMULIR PRODUK
+                                DETAIL PRODUK
                             </span>
 
 
@@ -125,7 +131,6 @@ export default function AddItemPage() {
                                         onChange={(e) => setFormData({ ...formData, nama: e.target.value })}
                                         required
                                         className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-3 focus:ring-[#800000] focus:border-[#800000] hover:border-[#800000] outline-none transition-colors duration-200"
-                                        placeholder="Contoh: Kopi Bubuk 250gr"
                                     />
                                 </div>
 
@@ -153,10 +158,10 @@ export default function AddItemPage() {
                                         <input
                                             type="number"
                                             id="stok"
-                                            value={formData.stok}
+                                            value={isNaN(formData.stok) ? '' : formData.stok}
                                             onChange={(e) => setFormData({ ...formData, stok: parseInt(e.target.value) })}
                                             required
-                                            min="0"
+                                            min="1"
                                             className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-3 focus:ring-[#800000] focus:border-[#800000] hover:border-[#800000] outline-none transition-colors duration-200"
                                         />
                                     </div>
@@ -167,7 +172,7 @@ export default function AddItemPage() {
                                         <input
                                             type="number"
                                             id="harga"
-                                            value={formData.harga}
+                                            value={isNaN(formData.harga) ? '' : formData.harga}
                                             onChange={(e) => setFormData({ ...formData, harga: parseInt(e.target.value) })}
                                             required
                                             min="0"

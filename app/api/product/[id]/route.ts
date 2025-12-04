@@ -10,6 +10,13 @@ export async function GET(req: Request, { params }: any) {
 export async function PUT(req: Request, { params }: any) {
   const body = await req.json();
 
+  if (body.stok !== undefined && body.stok <= 0) {
+    const deleted = await prisma.product.delete({
+      where: { id: Number(params.id) }
+    });
+    return Response.json({ message: "Value must be more than 0", ...deleted });
+  }
+
   const updated = await prisma.product.update({
     where: { id: Number(params.id) },
     data: body,
