@@ -1,6 +1,6 @@
 "use client";
 import { useState } from "react";
-import Footer from "@/components/Footer";
+import Footer from "@/components/footer";
 import Header from "@/components/Header";
 import Navbar from "@/components/navbar";
 import Link from "next/link";
@@ -51,7 +51,7 @@ export default function AddMembershipPage() {
     return (
         <>
             <Header />
-            <div className="flex">
+            <div className="flex bg-white">
 
                 <div className="fixed top-0 left-0 h-full z-30">
                     <Navbar />
