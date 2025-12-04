@@ -4,103 +4,91 @@ import React, { useState, useEffect } from 'react';
 import Footer from "@/components/Footer";
 import Header from "@/components/Header";
 import Navbar from "@/components/navbar";
+import { getWorkers, createWorker, deleteWorker } from './actions';
 
-interface Employee {
+interface Worker {
   id: string;
   nama: string;
-  produkTerjual: number | null;
-  absensi: string | null;
-  jamKerja: number | null;
-  gaji: number | null;
-  performa: number | null;
+  email: string;
 }
 
 export default function WorkerManagementPage() {
   const [mounted, setMounted] = useState(false);
-  const [employees, setEmployees] = useState<Employee[]>([]);
+  const [workers, setWorkers] = useState<Worker[]>([]);
+  const [searchTerm, setSearchTerm] = useState('');
   
   const [formData, setFormData] = useState({ name: '', id: '', email: '', password: '' });
 
   useEffect(() => {
     setMounted(true);
-    const savedData = localStorage.getItem('users');
-    
-    if (savedData) {
-      setEmployees(JSON.parse(savedData));
-    } else {
-      const defaultData: Employee[] = [
-        { id: 'KSR-01', nama: 'Chika Yumayu', produkTerjual: 173, absensi: '27/30', jamKerja: 40, gaji: 5500000, performa: 4.5 },
-        { id: 'KSR-02', nama: 'Eli Cohen', produkTerjual: 121, absensi: '24/30', jamKerja: 38, gaji: 4800000, performa: 3.2 },
-        { id: 'KSR-03', nama: 'Lisa ', produkTerjual: 155, absensi: '29/30', jamKerja: 40, gaji: 4800000, performa: 4.8 },
-        { id: 'KSR-04', nama: 'Vanesa', produkTerjual: 198, absensi: '30/30', jamKerja: 42, gaji: 5200000, performa: 5.0 },
-        { id: 'KSR-05', nama: 'Yunita Feriana', produkTerjual: 98, absensi: '28/30', jamKerja: 35, gaji: 4500000, performa: 3.9 }
-      ];
-      setEmployees(defaultData);
-      localStorage.setItem('users', JSON.stringify(defaultData));
-    }
+    const fetchData = async () => {
+      try {
+        const data = await getWorkers();
+        setWorkers(data);
+      } catch (error) {
+        console.error("Failed to fetch workers");
+      }
+    };
+    fetchData();
   }, []);
 
-  useEffect(() => {
-    if (mounted) localStorage.setItem('users', JSON.stringify(employees));
-  }, [employees, mounted]);
-
-  const handleAddEmployee = (e: React.FormEvent) => {
+  const handleAddWorker = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    const newEmp: Employee = {
-      id: formData.id,
-      nama: formData.name, 
-      produkTerjual: 0,
-      absensi: '0/30',
-      jamKerja: 0,
-      gaji: 0,
-      performa: 0,
-    };
+    try {
+      await createWorker({
+        id: formData.id,
+        nama: formData.name,
+        email: formData.email,
+        password: formData.password
+      });
 
-    setEmployees([...employees, newEmp]);
-    setFormData({ name: '', id: '', email: '', password: '' });
-    alert('Akun berhasil dibuat!');
-  };
-
-  const removeEmployee = (id: string) => {
-    if (confirm(`Apakah Anda yakin ingin menghapus karyawan dengan ID ${id}?`)) {
-      setEmployees(employees.filter(e => e.id !== id));
+      const updatedList = await getWorkers();
+      setWorkers(updatedList);
+      
+      setFormData({ name: '', id: '', email: '', password: '' });
+      alert('Akun berhasil dibuat!');
+    } catch (error) {
+      alert('Error: ID might already exist.');
     }
   };
 
-  const filteredEmployees = employees;
-
-  const calculateAttendance = (absensi: string | null) => {
-    if (!absensi) return 'N/A';
-    const [attended, total] = absensi.split('/').map(Number);
-    if (!total) return 'N/A';
-    return `${Math.round((attended / total) * 100)}%`;
+  const removeWorker = async (id: string) => {
+    if (confirm(`Apakah Anda yakin ingin menghapus karyawan dengan ID ${id}?`)) {
+      try {
+        await deleteWorker(id);
+        setWorkers(workers.filter(w => w.id !== id));
+      } catch (error) {
+        alert("Failed to delete worker");
+      }
+    }
   };
 
-  const renderStars = (rating: number | null) => {
-    if (!rating) return <span className="text-gray-400">N/A</span>;
-    return <span className="text-yellow-500">{'★'.repeat(Math.floor(rating))} <span className="text-gray-500 text-xs">({rating})</span></span>;
-  };
+  const filteredWorkers = workers.filter(w => 
+    w.nama.toLowerCase().includes(searchTerm.toLowerCase()) || 
+    w.id.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   if (!mounted) return null;
 
   return (
-    <div className="min-h-screen bg-white text-gray-900 font-sans">    
+    <div className="min-h-screen bg-white text-gray-900 font-sans">
+      
       <Header />
+
       <Navbar />
+
       <main className="content pt-20 p-6 ml-[200px] transition-all duration-300">
         
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 mb-8">
           <div>
             <h2 className="text-3xl font-bold text-gray-900">Team Overview</h2>
-            <p className="text-gray-500 mt-1">Manage staff, track performance, and create accounts.</p>
+            <p className="text-gray-500 mt-1">Manage staff and create accounts.</p>
           </div>
         </div>
 
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <StatCard label="Jumlah Karyawan" value={employees.length} sub="Active Staff" />
-          <StatCard label="Barang Terjual" value="1240" sub="Total Items" />
-          <StatCard label="Total Produk" value="312" sub="In Stock" />
+          <StatCard label="Jumlah Karyawan" value={workers.length} sub="Active Staff" />
           <StatCard label="Last Update" value="07 Okt 2025" sub="14:32" />
         </div>
 
@@ -109,45 +97,30 @@ export default function WorkerManagementPage() {
           <section className="lg:col-span-2 space-y-6">
             <div className="flex justify-between items-center gap-4">
               <h3 className="text-xl font-semibold whitespace-nowrap text-gray-900">Staff Roster</h3>
+              <input 
+                  type="text" 
+                  value={searchTerm} 
+                  onChange={(e) => setSearchTerm(e.target.value)}
+                  placeholder="Cari Nama atau ID..."
+                  className="px-4 py-2 w-full max-w-xs bg-white border border-gray-300 rounded-lg text-sm text-gray-900 outline-none focus:border-[var(--maroon)]"
+              />
             </div>
 
             <div className="grid grid-cols-1 gap-4">
-              {filteredEmployees.map((emp, index) => (
+              {filteredWorkers.map((worker, index) => (
                 <div key={index} className="group relative bg-white border border-gray-200 rounded-xl p-5 hover:shadow-md transition-all">
-                  
-                  <div className="flex-1 grid grid-cols-2 sm:grid-cols-3 gap-y-4 gap-x-2 text-sm">
-                      <div className="col-span-2 sm:col-span-3 mb-2 flex justify-between">
-                          <div>
-                              <h4 className="font-bold text-lg text-gray-900">{emp.nama}</h4>
-                              <span className="text-xs font-mono text-gray-500 bg-gray-100 px-2 py-0.5 rounded">{emp.id}</span>
-                          </div>
-                           <button onClick={() => removeEmployee(emp.id)} className="text-xs text-red-600 border border-red-600 px-3 py-1 rounded hover:bg-red-600 hover:text-white transition-colors h-fit">REMOVE</button>
-                      </div>                      
-                      <div>
-                        <p className="text-xs text-gray-500">Produk Terjual</p>
-                        <p className="font-medium text-gray-900">{emp.produkTerjual || 'N/A'}</p>
+                  <div className="flex justify-between items-center">
+                      <div className="flex flex-col">
+                          <h4 className="font-bold text-lg text-gray-900">{worker.nama}</h4>
+                          <span className="text-xs font-mono text-gray-500 bg-gray-100 px-2 py-0.5 rounded w-fit mt-1">{worker.id}</span>
+                          <span className="text-sm text-gray-500 mt-2">{worker.email}</span>
                       </div>
-                      <div>
-                        <p className="text-xs text-gray-500">Absensi</p>
-                        <p className="font-medium text-gray-900">{calculateAttendance(emp.absensi)}</p>
-                      </div>
-                      <div>
-                        <p className="text-xs text-gray-500">Jam Kerja/Mg</p>
-                        <p className="font-medium text-gray-900">{emp.jamKerja ? `${emp.jamKerja} jam` : 'N/A'}</p>
-                      </div>
-                      <div>
-                        <p className="text-xs text-gray-500">Gaji</p>
-                        <p className="font-medium text-gray-900">{emp.gaji ? `Rp ${emp.gaji.toLocaleString('id-ID')}` : 'N/A'}</p>
-                      </div>
-                      <div className="col-span-2">
-                        <p className="text-xs text-gray-500">Performa</p>
-                        <p className="text-gray-900">{renderStars(emp.performa)}</p>
-                      </div>
+                       <button onClick={() => removeWorker(worker.id)} className="text-xs text-red-600 border border-red-600 px-4 py-2 rounded hover:bg-red-600 hover:text-white transition-colors h-fit">REMOVE</button>
                   </div>
 
                 </div>
               ))}
-              {filteredEmployees.length === 0 && <div className="py-12 text-center text-gray-400 border-2 border-dashed border-gray-200 rounded-xl">Karyawan tidak ditemukan.</div>}
+              {filteredWorkers.length === 0 && <div className="py-12 text-center text-gray-400 border-2 border-dashed border-gray-200 rounded-xl">No workers found.</div>}
             </div>
           </section>
 
@@ -155,7 +128,7 @@ export default function WorkerManagementPage() {
             <div className="bg-white border border-gray-200 rounded-xl p-6 sticky top-24 shadow-sm">
               <h3 className="text-xl font-semibold mb-6 text-[var(--maroon)]">Create Account</h3>
               
-              <form onSubmit={handleAddEmployee} className="space-y-4">
+              <form onSubmit={handleAddWorker} className="space-y-4">
 
                 <div className="space-y-1">
                   <label className="text-xs font-bold uppercase text-gray-500">Name</label>

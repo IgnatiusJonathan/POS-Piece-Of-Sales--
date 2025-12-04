@@ -1,17 +1,10 @@
 import React from 'react';
 import Image from 'next/image';
-
-interface Barang {
-    barangID: string;
-    nama: string;
-    harga: number;
-    gambar: string;
-    stok?: number;
-}
+import { Product } from '@prisma/client';
 
 interface DetailKartu {
-    barang: Barang;
-    onClick?: (barang: Barang) => void;
+    barang: Product;
+    onClick?: (barang: Product) => void;
     className?: string;
     showQty?: boolean;
     isActive?: boolean;
@@ -44,17 +37,17 @@ export default function Kartu({
             onClick={handleClick}
         >
             <div className="w-full flex-1 flex items-center justify-center bg-gray-50 relative overflow-hidden">
-                {barang.gambar ? (
+                {barang.image ? (
                     <div className="relative w-full h-full p-2">
                         <Image
-                            src={barang.gambar}
+                            src={barang.image}
                             alt={barang.nama}
                             fill
                             className="object-contain"
                         />
                     </div>
                 ) : (
-                    <span className="text-gray-300 text-xs font-medium">No Image</span>
+                    <span className="text-gray-500 text-xs font-medium">Tidak ada gambar</span>
                 )}
             </div>
 
@@ -72,7 +65,7 @@ export default function Kartu({
                         background: "linear-gradient(to bottom right, #b91010, #840505)"
                     }}
                 >
-                    {barang.barangID ? `ID: ${barang.barangID}` : 'ITEM'}
+                    {barang.id ? `ID: ${barang.id}` : 'ITEM'}
                 </div>
                 <div className="mt-1">
                     <p className="text-white text-xs font-bold truncate">{barang.nama}</p>
