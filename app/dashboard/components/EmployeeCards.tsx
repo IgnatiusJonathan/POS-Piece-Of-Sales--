@@ -15,7 +15,7 @@ const employees: Employee[] = [
   {
     rank: 'gold',
     name: 'Lisa',
-    photo: '/img/employee1.jpg',
+    photo: '/images/employee1.jpg',
     sales: 120,
     attendance: 98,
     workHours: 83.8
@@ -23,7 +23,7 @@ const employees: Employee[] = [
   {
     rank: 'silver',
     name: 'Sharon',
-    photo: '/img/employee2.jpg',
+    photo: '/images/employee2.jpg',
     sales: 100,
     attendance: 95,
     workHours: 81.4
@@ -31,7 +31,7 @@ const employees: Employee[] = [
   {
     rank: 'bronze',
     name: 'Citra',
-    photo: '/img/employee3.jpg',
+    photo: '/images/employee3.jpg',
     sales: 90,
     attendance: 90,
     workHours: 79.2
