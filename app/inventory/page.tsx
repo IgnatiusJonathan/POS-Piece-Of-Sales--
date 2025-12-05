@@ -94,15 +94,21 @@ export default function InventoryPage() {
           />
 
           <div className="border border-t-0 border-[#800000] rounded-b-lg p-8 bg-white relative z-0 shadow-sm mx-6 -mt-10">
-            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-              {searchResults.map((item) => (
-                <InventoryCard
-                  key={item.id}
-                  item={item}
-                  onSelectProduct={setSelectedProduct}
-                />
-              ))}
-            </div>
+            {searchResults.length > 0 ? (
+              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
+                {searchResults.map((item) => (
+                  <InventoryCard
+                    key={item.id}
+                    item={item}
+                    onSelectProduct={setSelectedProduct}
+                  />
+                ))}
+              </div>
+            ) : (
+              <div className="flex flex-col items-center justify-center py-20 text-gray-500">
+                <p className="text-xl font-medium">Inventori Kosong</p>
+              </div>
+            )}
 
             <CategoryNavigation
               onNext={nextCategory}
