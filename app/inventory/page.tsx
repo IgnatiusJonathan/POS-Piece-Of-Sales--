@@ -73,7 +73,7 @@ export default function InventoryPage() {
         </div>
 
         <div
-          className="flex-1 h-screen overflow-y-auto bg-white transition-all duration-300"
+          className="flex-1 h-screen overflow-y-auto bg-white transition-all duration-300 pb-20"
           style={{ marginLeft: isCollapsed ? "80px" : "220px" }}
         >
           <div className="pt-[80px] px-8 pb-4 bg-white sticky top-0 z-20">
