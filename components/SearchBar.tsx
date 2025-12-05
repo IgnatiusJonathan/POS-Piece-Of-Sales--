@@ -5,9 +5,10 @@ interface IsiSearchBar<T> {
     onSearch: (hasil: T[]) => void;
     keySearch: keyof T;
     placeholder: string;
+    onQueryChange?: (query: string) => void;
 }
 
-export default function SearchBar<T>({ data, onSearch, keySearch, placeholder = "Cari produk..." }: IsiSearchBar<T>) {
+export default function SearchBar<T>({ data, onSearch, keySearch, placeholder = "Cari produk...", onQueryChange }: IsiSearchBar<T>) {
     const [hurufSearch, setHurufSearch] = useState('');
 
     const hurufSearchSmall = hurufSearch.toLowerCase();
@@ -19,6 +20,14 @@ export default function SearchBar<T>({ data, onSearch, keySearch, placeholder = 
     useEffect(() => {
         onSearch(terfilter);
     }, [hurufSearch, data, keySearch]);
+
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const val = e.target.value;
+        setHurufSearch(val);
+        if (onQueryChange) {
+            onQueryChange(val);
+        }
+    };
 
     const noData = data.length === 0;
     const noResult = !noData && terfilter.length === 0;
@@ -35,7 +44,7 @@ export default function SearchBar<T>({ data, onSearch, keySearch, placeholder = 
                     type="text"
                     placeholder={placeholder}
                     value={hurufSearch}
-                    onChange={(e) => setHurufSearch(e.target.value)}
+                    onChange={handleChange}
                     className="flex-1 p-2.5 rounded text-sm text-black"
                     style={{
                         backgroundColor: 'white',

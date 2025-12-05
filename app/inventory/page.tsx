@@ -18,6 +18,8 @@ export default function InventoryPage() {
   const [selectedCategory, setSelectedCategory] = useState("makanan");
   const [products, setProducts] = useState<Product[]>([]);
   const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+  const [searchResults, setSearchResults] = useState<Product[]>([]);
+  const [searchQuery, setSearchQuery] = useState("");
 
   const categories = [
     "Makanan",
@@ -63,6 +65,8 @@ export default function InventoryPage() {
     (item) => (item.jenis || "").toLowerCase() === selectedCategory
   );
 
+  const displayProducts = searchQuery ? searchResults : filteredProducts;
+
   return (
     <>
       <Header />
@@ -78,9 +82,11 @@ export default function InventoryPage() {
           <div className="pt-[80px] px-8 pb-4 bg-white sticky top-0 z-20">
             <SearchBar
               data={products}
-              onSearch={() => { }}
+              onSearch={setSearchResults}
               keySearch="nama"
               placeholder="Cari barang..."
+              onQueryChange={setSearchQuery}
+              key={selectedCategory} // Reset search when category changes
             />
           </div>
 
@@ -92,13 +98,19 @@ export default function InventoryPage() {
           />
 
           <div className="border border-t-0 border-[#800000] rounded-b-lg p-8 bg-white relative z-0 shadow-sm mx-6 -mt-10">
-            {filteredProducts.length === 0 ? (
-              <p className="text-gray-500 text-center text-sm py-20">
-                Inventori kosong
-              </p>
+            {displayProducts.length === 0 ? (
+              searchQuery ? (
+                <p className="text-gray-500 text-center text-sm py-20">
+                  Tidak ada barang yang sesuai
+                </p>
+              ) : (
+                <p className="text-gray-500 text-center text-sm py-20">
+                  Inventori kosong
+                </p>
+              )
             ) : (
               <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4">
-                {filteredProducts.map((item) => (
+                {displayProducts.map((item) => (
                   <InventoryCard
                     key={item.id}
                     item={item}
@@ -108,10 +120,12 @@ export default function InventoryPage() {
               </div>
             )}
 
-            <CategoryNavigation
-              onNext={nextCategory}
-              onPrev={prevCategory}
-            />
+            {!searchQuery && (
+              <CategoryNavigation
+                onNext={nextCategory}
+                onPrev={prevCategory}
+              />
+            )}
           </div>
 
 
