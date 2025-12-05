@@ -27,12 +27,12 @@ export default function PerformanceCard() {
     // Animasi untuk performance card
     const card = document.querySelector('.performance-card')
     if (card) {
-      ;(card as HTMLElement).style.opacity = "0"
-      ;(card as HTMLElement).style.transform = "translateY(30px)"
+      ; (card as HTMLElement).style.opacity = "0"
+        ; (card as HTMLElement).style.transform = "translateY(30px)"
       setTimeout(() => {
-        ;(card as HTMLElement).style.transition = "all 0.6s ease"
-        ;(card as HTMLElement).style.opacity = "1"
-        ;(card as HTMLElement).style.transform = "translateY(0)"
+        ; (card as HTMLElement).style.transition = "all 0.6s ease"
+          ; (card as HTMLElement).style.opacity = "1"
+          ; (card as HTMLElement).style.transform = "translateY(0)"
       }, 600)
     }
   }, [])
@@ -47,7 +47,7 @@ export default function PerformanceCard() {
         <p><strong>Absensi:</strong> 27/30</p>
         <p><strong>ID Karyawan:</strong> KSR-01</p>
       </div>
-      <img src="/img/Lexa.jpg" alt="Foto Karyawan" className="performance-photo" />
+      <img src="/images/Lexa.jpg" alt="Foto Karyawan" className="performance-photo" />
     </div>
   )
 }
