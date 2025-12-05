@@ -31,11 +31,22 @@ export default function WorkerManagementPage() {
           getProducts(),
           getLastUpdate()
         ]);
-        
+
         setWorkers(workersData);
         setHistory(historyData);
         setProducts(productsData);
-        setLastUpdateDate(lastUpdate);
+
+        const localLastUpdate = localStorage.getItem('lastWorkerUpdate');
+        let finalDate = lastUpdate;
+
+        if (localLastUpdate) {
+          const localDate = new Date(localLastUpdate);
+          const serverDate = lastUpdate ? new Date(lastUpdate) : new Date(0);
+          if (localDate > serverDate) {
+            finalDate = localDate;
+          }
+        }
+        setLastUpdateDate(finalDate);
       } catch (error) {
         console.error("Failed to fetch data");
       }
@@ -55,6 +66,10 @@ export default function WorkerManagementPage() {
 
       const updatedList = await getWorkers();
       setWorkers(updatedList);
+
+      const now = new Date();
+      localStorage.setItem('lastWorkerUpdate', now.toISOString());
+      setLastUpdateDate(now);
 
       setFormData({ name: '', email: '', password: '' });
       alert('Akun berhasil dibuat!');
@@ -115,10 +130,10 @@ export default function WorkerManagementPage() {
           <StatCard label="Jumlah Karyawan" value={workers.length} sub="Active Staff" />
           <StatCard label="Barang Terjual" value={history.length} sub="Total Items" />
           <StatCard label="Total Produk" value={products.length} sub="In Stock" />
-          <StatCard 
-            label="Last Update" 
-            value={formatDate(lastUpdateDate)} 
-            sub={formatTime(lastUpdateDate)} 
+          <StatCard
+            label="Last Update"
+            value={formatDate(lastUpdateDate)}
+            sub={formatTime(lastUpdateDate)}
           />
         </div>
 
